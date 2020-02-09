@@ -1,0 +1,20 @@
+---
+# tasks file for config
+#
+- name: configuracao de system
+  include: system.yaml
+  tags: 
+   - system
+   - all
+
+- name: usuario padroes
+  include: user.yaml
+  tags: 
+   - user
+   - all
+
+- name: pacote padroes
+  include: pacotes.yaml
+  tags:
+   - pacotes
+   - all

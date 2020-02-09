@@ -1,0 +1,10 @@
+- name: arquivos padroes do sistema
+  template: 
+   src: templates/hosts
+   dst: /etc/hosts
+
+- name: linhas padroes em um arquivo
+  blockinsile:
+  path: /etc/hosts
+  block: |
+    192.168.33.1 node1.olivarius.com.br

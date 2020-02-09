@@ -1,0 +1,22 @@
+---
+# tasks file for gitlad
+#
+- name: Ensure SELinux is set to enforcing mode
+  lineinfile:
+   path: /etc/selinux/config
+   regexp: '^SELINUX='
+   line: SELINUX=enforcing
+
+- name: Stop service firewall
+  service:
+   name: firewalld
+   state: stopped
+   enabled: false
+
+- name: Curl fitlab
+  shell: curl https://packages.gitlab.com/install/repositories/gitlab/gitlab-ce/.rpm.sh | sudo bash
+
+- name: install the latest version of gitlab
+  yum:
+    name: gitlab-ce
+    state: latest
