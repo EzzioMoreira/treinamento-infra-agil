@@ -1,4 +1,210 @@
-Treinamento Infra Agil - Fortaleza
+#### vagrantfile 
 
-versao 2
+Vagrant.configure("2") do |config|
 
+(1..2).each do |i|
+
+config.vm.define "node-#{i}" do |node|
+node.vm.box = "centos/7"
+node.vm.network "private_network", ip: "192.168.33.15#{i}"
+node.vm.hostname = "node#{i}.olivarius.com.br"
+
+node.vm.provider "virtualbox" do |vb|
+vb.memory = "2048"
+end
+
+end
+
+end
+
+config.vm.define "node-3" do |node3|
+node3.vm.box = "centos/7"
+node3.vm.network "private_network", ip: "192.168.33.153"
+node3.vm.hostname = "node3.olivarius.com.br"
+
+
+node3.vm.provider "virtualbox" do |vb|
+vb.memory = "2048"
+end
+
+end
+
+config.vm.provision "ansible" do |ansible|
+ansible.playbook = "playbook.yaml"
+end
+
+end
+
+
+
+###### PLAYBOOK 
+
+
+
+- name: playbook para o vagrant
+  hosts: all
+  become: yes
+  tasks:
+   - name: instalando epel-release
+     package:
+       name: epel-release
+       state: present
+   - name: instaland oo vim
+     package:
+         name: vim
+         state: present
+   - name: copiando a chave privada de ssh
+     copy:
+      src: devops
+      dest: /root/
+      mode: 0600
+     when: ansible_hostname == "node1"
+   - name: copiando chave publica
+     lineinfile:
+      path: /home/vagrant/.ssh/authorized_keys
+      line: "{{ lookup('file','devops.pub') }}"
+
+
+###3 ansible hosts ####
+
+[node1]
+192.168.33.151
+
+[allnode]
+192.168.33.15[1:3]
+
+[all:vars]
+ansible_ssh_user=vagrant
+ansible_ssh_private_key_file=/root/devops
+
+ansible localhost -m setup | grep -i -B5 192.168
+
+#### /etc/ansible/geral.yaml #####
+
+---
+- name: configuracao padrao para todas as maquinas
+  hosts: all
+  become: yes
+  roles:
+   - config
+
+#### /etc/ansible/roles/config/tasks/main.yml #####
+
+---
+# tasks file for config
+- name: configuracao de systema
+  include: system.yaml
+  tags:
+    - system
+    - all
+- name: usuarios padroes
+  include: users.yaml
+  tags:
+    - user
+    - all
+
+- name: pacotes padroes
+  include: pacotes.yaml
+  tags:
+    - pacotes
+    - all
+
+#### /etc/ansible/roles/config/tasks/pacotes.yaml #####
+
+- name: lista pacotes
+  package:
+    name: "{{ item }}"
+  with_items:
+    - figlet
+    - cowsay
+    - vim
+    - net-tools
+
+#### /etc/ansible/roles/config/tasks/system.yaml #####
+
+- name: arquivos padroes do system
+  template:
+    src: templates/hosts
+    dest: /etc/hosts
+- name: linhas padroes
+  blockinfile:
+    path: /etc/hosts
+    block: |
+      192.168.33.151 node1.olivarius.com.br
+      192.168.33.152 node2.olivarius.com.br
+      192.168.33.153 node3.olivarius.com.br
+
+#### /etc/ansible/roles/config/tasks/users.yaml #####
+
+- name: criando uma lista de usuarios
+  user:
+    name: "{{ item }}"
+  with_items:
+   - "{{ listausuarios }}"
+
+#### /etc/ansible/roles/config/vars/main.yml #####
+
+---
+# vars file for config
+listausuarios: ['batata', 'devops', 'bburso']
+
+#### /etc/ansible/roles/config/templates/hosts #####
+
+{{ ansible_eth1.ipv4.address }} {{ ansible_fqdn }}
+
+#### GITLAB INSTALAR ###### 
+criar uma role 
+
+DISABLED SELINUX /ETC/SYSCONFIG/SELINUX   == lineinfile 
+DISABLED FIREWALLD É  UM SERVICO   == service 
+
+curl https://packages.gitlab.com/install/repositories/gitlab/gitlab-ce/.rpm.sh | sudo bash   == shell 
+
+yum install -y gitlab-ce  == yum 
+
+10 min 
+
+
+########### 
+gitlab : 
+
+
+- name: instalando o gitlab-ce
+  hosts: node2
+  become: yes
+  tasks:
+  - name: disabled selinux
+  lineinfile:
+   path: /etc/selinux/config
+   regexp: '^SELINUX='
+   line: SELINUX=disabled
+
+- name: disabled firewalld
+  service:
+   name: firewalld
+   state: stopped
+   enabled: false
+
+- name: downloadd repository
+  shell: "curl https://packages.gitlab.com/install/repositories/gitlab/gitlab-ce/.rpm.sh | bash  "
+- name: install gitlab-ce
+  yum:
+   name: gitlab-ce
+   state: present
+
+
+######
+git init
+git status
+git add
+git commit
+git remote add ALIAS URL
+git push ALIAS  BRANCH
+
+git checkout -b novabranch
+
+git checkout
+
+git clone
+
+git pull
