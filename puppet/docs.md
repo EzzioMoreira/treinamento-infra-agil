@@ -30,3 +30,7 @@ sudo /opt/puppetlabs/bin/puppet resource service puppet ensure=running enable=tr
 export PATH=/opt/puppetlabs/bin:$PATH
 echo "export PATH=/opt/puppetlabs/bin:$PATH" >> /etc/bash.bashrc
 ```
+# Install puppet serber
+``` 
+puppet resource package puppetserver ensure=latest
+```
