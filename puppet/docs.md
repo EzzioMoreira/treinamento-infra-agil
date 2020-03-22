@@ -6,7 +6,7 @@ SELINUX=disabled
 # Desabilitar FW
 systemctl stop firewalld
 
-systemctl disable firewald
+systemctl disable firewalld
 
 # Install puppet agent
 sudo yum install puppet-agent
