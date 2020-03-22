@@ -24,3 +24,9 @@ $ sudo yum update -y
 $ sudo yum install puppet-agent
 $ sudo /opt/puppetlabs/bin/puppet resource service puppet ensure=running enable=true
 ```
+# Export PATH
+
+```
+export PATH=/opt/puppetlabs/bin:$PATH
+echo "export PATH=/opt/puppetlabs/bin:$PATH" >> /etc/bash.bashrc
+```
