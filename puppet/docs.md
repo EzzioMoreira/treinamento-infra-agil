@@ -1,15 +1,15 @@
-# Desabilitar SELinux
+## Desabilitar SELinux
 vim /etc/selinux/config
 
 SELINUX=disabled
 
-# Desabilitar FW
+## Desabilitar FW
 
 $ systemctl stop firewalld
 
 $ systemctl disable firewald
 
-# Install puppet agent
+## Install puppet agent
 
 $ sudo yum install puppet-agent
 
