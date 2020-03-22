@@ -34,3 +34,4 @@ echo "export PATH=/opt/puppetlabs/bin:$PATH" >> /etc/bash.bashrc
 ``` 
 puppet resource package puppetserver ensure=latest
 ```
+- Os binários dos componentes do Puppet ficam centralizados no diretório /opt/puppetlabs. Já os arquivos de configuração ficam centralizados em /etc/puppetlabs:
