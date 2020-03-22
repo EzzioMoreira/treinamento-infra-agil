@@ -35,3 +35,13 @@ echo "export PATH=/opt/puppetlabs/bin:$PATH" >> /etc/bash.bashrc
 puppet resource package puppetserver ensure=latest
 ```
 - Os binários dos componentes do Puppet ficam centralizados no diretório /opt/puppetlabs. Já os arquivos de configuração ficam centralizados em /etc/puppetlabs:
+- Alterar as configurações de memória a ser usada pela JVM durante a execução do Puppet server: No CentosOS/Red Hat edite o arquivo /etc/sysconfig/puppetserver e no Debian/Ubuntu edite o arquivo /etc/default/puppetserver.
+```
+Antes: JAVA_ARGS="-Xms2g-Xmx2g-XX:MaxPermSize=256m"
+
+Depois: JAVA_ARGS="-Xms512m-Xmx512m-XX:MaxPermSize=256m"
+```
+- Com esta configuração são alocados até 512 MB para uso da JVM. Por padrão, são alocados 2 GB de memória. Após alteração reiniciar serviço.
+```
+systemctl restart puppetserver
+```
