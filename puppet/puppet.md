@@ -50,8 +50,8 @@ systemctl restart puppetserver
 - Para o Puppet, tudo o que existe no sistema operacional é um resource, que pode ser do tipo: arquivo, pacote, serviço, usuário, entre outros.
 - O Puppet possui uma camada chamada de RAL (Resource Abstraction Layer). Nela, cada recurso pode ter um ou mais providers associados, que são responsáveis pelo gerenciamento do recurso. O RAL é quem fará o trabalgo de checar o sistema operacional e determinar o provider adequado para realizar instalação de um pacote, criaçao de usuário, trabalhar com serviços, etc. 
 - Todo recurso tem certas características que o identificam. Exemplo.
- + Um diretório tem um caminho e um dono.
- + Um usuário possui um grupo.
- + Um usuário possui um número identificador.
+ 1. Um diretório tem um caminho e um dono.
+ 2. Um usuário possui um grupo.
+ 3. Um usuário possui um número identificador.
  - Essas caractéristicas são chamadas de atributos. O Puppet agrupa recursos e atributos semelhantes em resource types.
  - A combinação de resources, providers, resource type e atributos formam a RAL, onde os resources estão em alto nível e os providers ficam em baixo nível.
