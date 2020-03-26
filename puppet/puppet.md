@@ -55,3 +55,19 @@ systemctl restart puppetserver
  3. Um usuário possui um número identificador.
  - Essas caractéristicas são chamadas de atributos. O Puppet agrupa recursos e atributos semelhantes em resource types.
  - A combinação de resources, providers, resource type e atributos formam a RAL, onde os resources estão em alto nível e os providers ficam em baixo nível.
+ - Os providers possuem implementações específicas que variam de acordo com o sistema operacional. 
+
+# Gerenciamento de recursos
+
+- O comando a seguir mostra a lista completa de todos os recursos-padrão:
+```
+puppet resource -types
+```
+- O comando puppet describe mostra a documentação acerca dos atributos de um recurso.
+```
+puppet describe user
+```
+
+# Desenvolvendo manifests
+
+- No Puppet, as declarações de configuração são chamadas de manifests e são salvos em arquivos com a extensão .pp. Nos manifests podemos ter condições, agrupar recursos, usar funções, reaproveitar e referenciar código em outro manifests, integrar dados oriundos de fontes externas ao código.
